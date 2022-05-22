@@ -16,38 +16,106 @@ struct ContentView: View {
     @State var searchQuery: String = ""
     
     var body: some View {
-        NavigationView {
-            List(searchResults, id: \.link) { searchResult in
-                VStack(alignment: .leading, spacing: 2.0) {
-                    Text(searchResult.title)
-                        .font(.body)
-                        .foregroundColor(.accentColor)
-                    Text(searchResult.description)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(searchResult.link)
-                        .font(.caption)
+        TabView {
+            
+            NavigationView {
+                List(searchResults, id: \.link) { searchResult in
+                    VStack(alignment: .leading, spacing: 2.0) {
+                        Text(verbatim: searchResult.title)
+                            .font(.body)
+                            .foregroundColor(.accentColor)
+                        Text(verbatim: searchResult.description)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(verbatim: searchResult.link)
+                            .font(.caption)
+                    }
+                    .onTapGesture {
+                        UIApplication.shared.open(URL(string: searchResult.link)!)
+                        //showSafariViewController.toggle()
+                    }
+    //                .sheet(isPresented: $showSafariViewController, content: {
+    //                    SafariView(url: URL(string: searchResult.link)!)
+    //                })
                 }
-                .onTapGesture {
-                    UIApplication.shared.open(URL(string: searchResult.link)!)
-                    //showSafariViewController.toggle()
-                }
-//                .sheet(isPresented: $showSafariViewController, content: {
-//                    SafariView(url: URL(string: searchResult.link)!)
-//                })
+                .listStyle(.grouped)
+                .searchable(text: $searchQuery, prompt: "Google Search")
+                .onSubmit(of: .search, {
+                    Task {
+                        await loadSearchResults(query: searchQuery)
+                    }
+                })
+                .refreshable {
+                        await loadSearchResults(query: searchQuery)
+                    }
+                .navigationTitle("Web Search")
             }
-            .listStyle(.grouped)
-            .searchable(text: $searchQuery, prompt: "Google Search")
-            .onSubmit(of: .search, {
-                Task {
-                    await loadSearchResults(query: searchQuery)
-                }
-            })
-            .refreshable {
-                    await loadSearchResults(query: searchQuery)
-                }
-            .navigationTitle("Webtrotter")
+            .tabItem {
+                Label("Search", systemImage: "magnifyingglass")
             }
+            
+            NavigationView {
+                List {
+                }
+                .navigationTitle("Image Search")
+            }
+            .tabItem {
+                Label("Images", systemImage: "photo.on.rectangle.angled")
+            }
+            
+            NavigationView {
+                List {
+                    HStack(alignment: .center, spacing: 16.0) {
+                        Image("CellGitHub")
+                        VStack(alignment: .leading, spacing: 2.0) {
+                            Text("Get the source code")
+                                .font(.body)
+                            Text("katagaki/Webtrotter")
+                                .font(.caption)
+                        }
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIApplication.shared.open(URL(string: "https://github.com/katagaki/Webtrotter")!)
+                    }
+                    HStack(alignment: .center, spacing: 16.0) {
+                        Image("CellTwitter")
+                        VStack(alignment: .leading, spacing: 2.0) {
+                            Text("Tweet me")
+                                .font(.body)
+                            Text("@katagaki_")
+                                .font(.caption)
+                        }
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIApplication.shared.open(URL(string: "https://twitter.com/katagaki_")!)
+                    }
+                    HStack(alignment: .center, spacing: 16.0) {
+                        Image("CellEmail")
+                        VStack(alignment: .leading, spacing: 2.0) {
+                            Text("Email me")
+                                .font(.body)
+                            Text(verbatim: "ktgk.public@icloud.com")
+                                .font(.caption)
+                        }
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIApplication.shared.open(URL(string: "mailto:ktgk.public@icloud.com")!)
+                    }
+                }
+                .listStyle(.insetGrouped)
+                .navigationTitle("Settings")
+            }
+            .tabItem {
+                Label("Settings", systemImage: "gear")
+            }
+            
+        }
     }
     
     func loadSearchResults(query: String) async {
