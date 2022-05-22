@@ -21,12 +21,12 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 2.0) {
                     Text(searchResult.title)
                         .font(.body)
+                        .foregroundColor(.accentColor)
                     Text(searchResult.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Text(searchResult.link)
                         .font(.caption)
-                        .foregroundColor(.blue)
                 }
                 .onTapGesture {
                     UIApplication.shared.open(URL(string: searchResult.link)!)
@@ -36,7 +36,7 @@ struct ContentView: View {
 //                    SafariView(url: URL(string: searchResult.link)!)
 //                })
             }
-            .listStyle(.insetGrouped)
+            .listStyle(.grouped)
             .searchable(text: $searchQuery, prompt: "Google Search")
             .onSubmit(of: .search, {
                 Task {
