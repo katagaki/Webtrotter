@@ -10,7 +10,11 @@
 		E46FD9F4283A5477008EC3F5 /* WebtrotterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46FD9F3283A5477008EC3F5 /* WebtrotterApp.swift */; };
 		E46FD9F6283A5477008EC3F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46FD9F5283A5477008EC3F5 /* ContentView.swift */; };
 		E46FD9F8283A5478008EC3F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46FD9F7283A5478008EC3F5 /* Assets.xcassets */; };
-		E46FD9FB283A5478008EC3F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46FD9FA283A5478008EC3F5 /* Preview Assets.xcassets */; };
+		E46FDA02283A5536008EC3F5 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46FDA01283A5536008EC3F5 /* SearchResult.swift */; };
+		E46FDA05283A5604008EC3F5 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = E46FDA04283A5604008EC3F5 /* SwiftSoup */; };
+		E46FDA08283A570C008EC3F5 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46FDA07283A570C008EC3F5 /* String.swift */; };
+		E46FDA0B283A62E1008EC3F5 /* search.html in Resources */ = {isa = PBXBuildFile; fileRef = E46FDA0A283A62E1008EC3F5 /* search.html */; };
+		E46FDA0D283A6B5F008EC3F5 /* searchResults.html in Resources */ = {isa = PBXBuildFile; fileRef = E46FDA0C283A6B5F008EC3F5 /* searchResults.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,7 +22,10 @@
 		E46FD9F3283A5477008EC3F5 /* WebtrotterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebtrotterApp.swift; sourceTree = "<group>"; };
 		E46FD9F5283A5477008EC3F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E46FD9F7283A5478008EC3F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E46FD9FA283A5478008EC3F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E46FDA01283A5536008EC3F5 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		E46FDA07283A570C008EC3F5 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		E46FDA0A283A62E1008EC3F5 /* search.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = search.html; sourceTree = "<group>"; };
+		E46FDA0C283A6B5F008EC3F5 /* searchResults.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = searchResults.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E46FDA05283A5604008EC3F5 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,20 +59,31 @@
 		E46FD9F2283A5477008EC3F5 /* Webtrotter */ = {
 			isa = PBXGroup;
 			children = (
+				E46FD9F7283A5478008EC3F5 /* Assets.xcassets */,
 				E46FD9F3283A5477008EC3F5 /* WebtrotterApp.swift */,
 				E46FD9F5283A5477008EC3F5 /* ContentView.swift */,
-				E46FD9F7283A5478008EC3F5 /* Assets.xcassets */,
-				E46FD9F9283A5478008EC3F5 /* Preview Content */,
+				E46FDA01283A5536008EC3F5 /* SearchResult.swift */,
+				E46FDA06283A5703008EC3F5 /* Extensions */,
+				E46FDA09283A62B5008EC3F5 /* Samples */,
 			);
 			path = Webtrotter;
 			sourceTree = "<group>";
 		};
-		E46FD9F9283A5478008EC3F5 /* Preview Content */ = {
+		E46FDA06283A5703008EC3F5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				E46FD9FA283A5478008EC3F5 /* Preview Assets.xcassets */,
+				E46FDA07283A570C008EC3F5 /* String.swift */,
 			);
-			path = "Preview Content";
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E46FDA09283A62B5008EC3F5 /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				E46FDA0A283A62E1008EC3F5 /* search.html */,
+				E46FDA0C283A6B5F008EC3F5 /* searchResults.html */,
+			);
+			path = Samples;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +102,9 @@
 			dependencies = (
 			);
 			name = Webtrotter;
+			packageProductDependencies = (
+				E46FDA04283A5604008EC3F5 /* SwiftSoup */,
+			);
 			productName = Webtrotter;
 			productReference = E46FD9F0283A5477008EC3F5 /* Webtrotter.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +133,9 @@
 				Base,
 			);
 			mainGroup = E46FD9E7283A5477008EC3F5;
+			packageReferences = (
+				E46FDA03283A5604008EC3F5 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = E46FD9F1283A5477008EC3F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,7 +150,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E46FD9FB283A5478008EC3F5 /* Preview Assets.xcassets in Resources */,
+				E46FDA0B283A62E1008EC3F5 /* search.html in Resources */,
+				E46FDA0D283A6B5F008EC3F5 /* searchResults.html in Resources */,
 				E46FD9F8283A5478008EC3F5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +164,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E46FD9F6283A5477008EC3F5 /* ContentView.swift in Sources */,
+				E46FDA02283A5536008EC3F5 /* SearchResult.swift in Sources */,
+				E46FDA08283A570C008EC3F5 /* String.swift in Sources */,
 				E46FD9F4283A5477008EC3F5 /* WebtrotterApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,7 +294,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Webtrotter/Preview Content\"";
 				DEVELOPMENT_TEAM = YYM4Z6MU8F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -295,7 +322,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Webtrotter/Preview Content\"";
 				DEVELOPMENT_TEAM = YYM4Z6MU8F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -339,6 +365,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E46FDA03283A5604008EC3F5 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 2.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E46FDA04283A5604008EC3F5 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E46FDA03283A5604008EC3F5 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E46FD9E8283A5477008EC3F5 /* Project object */;
 }
