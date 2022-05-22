@@ -46,11 +46,14 @@ struct ContentView: View {
             .refreshable {
                     await loadSearchResults(query: searchQuery)
                 }
-            .navigationTitle("Search")
+            .navigationTitle("Webtrotter")
             }
     }
     
     func loadSearchResults(query: String) async {
+        if query == "" {
+            return
+        }
         if let searchURL = URL(string: "https://google.com/search?q=\(query.urlEncoded)&hl=en") {
             var request = URLRequest(url: searchURL)
             request.httpMethod = "GET"
@@ -62,7 +65,8 @@ struct ContentView: View {
                 let html = String(data: data, encoding: .utf8)!
                 let doc: Document = try parse(html)
                 let searchResultsHTML: Elements = try doc.getElementById("search")!.getElementsByClass("v7W49e").get(0).getElementsByTag("div")
-
+                
+                searchResults.removeAll()
                 for searchResultHTML: Element in searchResultsHTML {
                     if searchResultHTML.hasClass("jtfYYd") || searchResultHTML.hasClass("tF2Cxc") {
                         var searchResultObject: SearchResult = SearchResult()
