@@ -61,6 +61,20 @@ struct ContentView: View {
                     }
                 })
                 .navigationTitle("Web Search")
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        Spacer()
+                    }
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            print("Next button tapped.")
+                        } label: {
+                            Text("Next")
+                            Image(systemName: "arrow.forward")
+                        }
+
+                    }
+                }
             }
             .tabItem {
                 Label("Search", systemImage: "magnifyingglass")
