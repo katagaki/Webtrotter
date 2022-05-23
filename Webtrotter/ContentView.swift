@@ -31,6 +31,7 @@ struct ContentView: View {
                                 .foregroundColor(.secondary)
                             Text(verbatim: searchResult.link)
                                 .font(.caption)
+                                .foregroundColor(Color("LinkColor"))
                             Spacer(minLength: 2.0)
                         }
                         .onTapGesture {
@@ -164,6 +165,13 @@ func loadSearchResults(query: String) async -> [SearchResult] {
     var searchResults: [SearchResult] = []
     
     if query != "" {
+        
+        // Clear cookies
+        for cookie in HTTPCookieStorage.shared.cookies ?? [] {
+            HTTPCookieStorage.shared.deleteCookie(cookie)
+        }
+        
+        // Start search query
         if let searchURL = URL(string: "https://google.com/search?q=\(query.urlEncoded)&hl=en") {
             
             var request = URLRequest(url: searchURL)
