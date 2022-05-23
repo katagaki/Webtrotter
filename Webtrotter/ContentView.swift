@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-//    @State var showSafariViewController: Bool = false
+    @State var showActivityIndicator: Bool = false
     @State var searchResults: [SearchResult] = []
     @State var searchQuery: String = ""
     
@@ -20,34 +20,45 @@ struct ContentView: View {
             
             NavigationView {
                 List(searchResults, id: \.link) { searchResult in
-                    VStack(alignment: .leading, spacing: 2.0) {
-                        Text(verbatim: searchResult.title)
-                            .font(.body)
-                            .foregroundColor(.accentColor)
-                        Text(verbatim: searchResult.description)
-                            .font(.caption)
+                    HStack(alignment: .center, spacing: 2.0) {
+                        VStack(alignment: .leading, spacing: 2.0) {
+                            Spacer(minLength: 2.0)
+                            Text(verbatim: searchResult.title)
+                                .font(.body)
+                                .foregroundColor(.accentColor)
+                            Text(verbatim: searchResult.description)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(verbatim: searchResult.link)
+                                .font(.caption)
+                            Spacer(minLength: 2.0)
+                        }
+                        .onTapGesture {
+                            UIApplication.shared.open(URL(string: searchResult.link)!)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
                             .foregroundColor(.secondary)
-                        Text(verbatim: searchResult.link)
-                            .font(.caption)
                     }
-                    .onTapGesture {
-                        UIApplication.shared.open(URL(string: searchResult.link)!)
-                        //showSafariViewController.toggle()
-                    }
-    //                .sheet(isPresented: $showSafariViewController, content: {
-    //                    SafariView(url: URL(string: searchResult.link)!)
-    //                })
                 }
                 .listStyle(.grouped)
-                .searchable(text: $searchQuery, prompt: "Google Search")
+                .searchable(text: $searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: "Google Search")
                 .onSubmit(of: .search, {
                     Task {
-                        await loadSearchResults(query: searchQuery)
+                        showActivityIndicator = true
+                        searchResults = await loadSearchResults(query: searchQuery)
+                        showActivityIndicator = false
                     }
                 })
                 .refreshable {
-                        await loadSearchResults(query: searchQuery)
+                        searchResults = await loadSearchResults(query: searchQuery)
                     }
+                .overlay(content: {
+                    if showActivityIndicator {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                    }
+                })
                 .navigationTitle("Web Search")
             }
             .tabItem {
@@ -118,11 +129,43 @@ struct ContentView: View {
         }
     }
     
-    func loadSearchResults(query: String) async {
-        if query == "" {
-            return
+    func setSearchResults(searchResults: [SearchResult]) {
+        self.searchResults = searchResults
+    }
+    
+}
+
+struct ContentView_Previews: PreviewProvider {
+    
+    static var dummyData: [SearchResult] = [SearchResult(title: "Lorem Ipsum Dolor Amet",
+                                                         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sapien massa, auctor sed dolor nec, accumsan scelerisque turpis. Sed in dignissim mi, et...",
+                                                         link: "https://www.lipsum.com"),
+                                            SearchResult(title: "Suspendisse nec felis non erat convallis",
+                                                         description: "Suspendisse faucibus tempor felis a viverra. Maecenas nibh tortor, luctus ac sodales sit amet, congue nec turpis. Proin mi felis, ultrices feugiat ultrices quis, lobortis scelerisque ante.",
+                                                         link: "https://www2.suspendisse.com"),
+                                            SearchResult(title: "Vestibulum - Ante",
+                                                         description: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia ...",
+                                                         link: "https://www.vestibulum-ante.org")]
+    static var previews: some View {
+        Group {
+            ContentView(searchResults: dummyData)
+                .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
+                .previewDisplayName("iPhone 12")
+                .preferredColorScheme(.light)
+            ContentView(searchResults: dummyData)
+                .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
+                .previewDisplayName("iPhone 8")
+                .preferredColorScheme(.dark)
         }
+    }
+}
+
+func loadSearchResults(query: String) async -> [SearchResult] {
+    var searchResults: [SearchResult] = []
+    
+    if query != "" {
         if let searchURL = URL(string: "https://google.com/search?q=\(query.urlEncoded)&hl=en") {
+            
             var request = URLRequest(url: searchURL)
             request.httpMethod = "GET"
             request.addValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36", forHTTPHeaderField: "User-Agent")
@@ -134,7 +177,6 @@ struct ContentView: View {
                 let doc: Document = try parse(html)
                 let searchResultsHTML: Elements = try doc.getElementById("search")!.getElementsByClass("v7W49e").get(0).getElementsByTag("div")
                 
-                searchResults.removeAll()
                 for searchResultHTML: Element in searchResultsHTML {
                     if searchResultHTML.hasClass("jtfYYd") || searchResultHTML.hasClass("tF2Cxc") {
                         var searchResultObject: SearchResult = SearchResult()
@@ -183,23 +225,5 @@ struct ContentView: View {
             print("Invalid search query.")
         }
     }
-    
-}
-
-//struct SafariView: UIViewControllerRepresentable {
-//    let url: URL
-//
-//    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
-//        return SFSafariViewController(url: url)
-//    }
-//
-//    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {
-//        return
-//    }
-//}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+    return searchResults
 }

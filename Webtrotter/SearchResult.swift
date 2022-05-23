@@ -7,8 +7,6 @@
 
 import Foundation
 
-infix operator ==
-
 struct SearchResult: Codable {
     var title: String = ""
     var description: String = ""
